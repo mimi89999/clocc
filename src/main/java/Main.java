@@ -65,7 +65,7 @@ public class Main {
 
     private Main() throws XmppStringprepException {
         //*
-        SmackConfiguration.DEBUG = true;
+        SmackConfiguration.DEBUG = false;
         /*/
         SmackConfiguration.DEBUG = false;
         //*/
@@ -80,7 +80,31 @@ public class Main {
         String prompt = "> ";
 
         Scanner scanner = new Scanner(System.in);
+
+        File configFile = new File("store/settings.txt");
+        Scanner configScanner = new Scanner(configFile);
+
         String jidname = null, password = null;
+
+        while (configScanner.hasNextLine()) {
+            String configLine = configScanner.nextLine();
+            String [] split = configLine.split("=");
+            if (configLine.startsWith("jidname")) {
+                jidname = split[1];
+                System.out.println(jidname);
+            } else if (configLine.startsWith("password")) {
+                password = split[1];
+                System.out.println(password);
+            } else if (configLine.startsWith("deviceId")) {
+                deviceId = Integer.parseInt(split[1]);
+                System.out.println(deviceId);
+            //} else {
+            //    System.out.println("deviceId is required!");
+            }
+        }
+
+        configScanner.close();
+
         while(jidname == null) {
             System.out.println("Enter username:");
             jidname = scanner.nextLine();
